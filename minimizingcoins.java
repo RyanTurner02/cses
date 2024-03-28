@@ -2,7 +2,7 @@ import java.util.*;
 import java.io.*;
 
 public class minimizingcoins {
-    private static boolean flag;
+    private static final int oo = Integer.MAX_VALUE;
 
     public static void main(String[] args) {
         try {
@@ -14,73 +14,65 @@ public class minimizingcoins {
             int[] c = new int[n];
             for (int i = 0; i < n; i++)
                 c[i] = Integer.valueOf(cS[i]);
-            flag = false;
-            System.out.println(solve_rec(c, n, x));
-            System.out.println(solve_memo(c, n, x));
+
+            // long sol = solve_rec(c, x);
+            long sol = solve_memo(c, x);
+
+            if (sol == oo) {
+                sol = -1;
+            }
+
+            System.out.println(sol);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static long solve_rec(int[] c, int n, int x) {
+    public static long solve_rec(int[] c, int x) {
         if (x == 0) {
-            flag = true;
             return 0;
         }
 
-        long counter = Integer.MAX_VALUE;
+        long counter = oo;
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < c.length; i++) {
             int diff = x - c[i];
 
             if (diff < 0) {
-                break;
+                continue;
             }
 
-            counter = Math.min(counter, solve_rec(c, n, diff) + 1);
+            counter = Math.min(counter, solve_rec(c, diff) + 1);
         }
-
-        if (flag) {
-            return counter;
-        } else {
-            return -1;
-        }
+        return counter;
     }
 
-    public static long solve_memo(int[] c, int n, int x) {
+    public static long solve_memo(int[] c, int x) {
         long[] memo = new long[x + 1];
-        Arrays.fill(memo, -1);
-        long ret = solve_memo(memo, c, n, x);
+        Arrays.fill(memo, oo);
+        long ret = solve_memo(memo, c, x);
         // System.out.println(Arrays.toString(memo));
         return ret;
     }
 
-    private static long solve_memo(long[] memo, int[] c, int n, int x) {
+    private static long solve_memo(long[] memo, int[] c, int x) {
         if (x == 0) {
-            flag = true;
             return 0;
         }
 
-        if (memo[x] != -1) {
+        if (memo[x] != oo) {
             return memo[x];
         }
 
-        long counter = Integer.MAX_VALUE;
-
-        for (int i = 0; i < n; i++) {
+        for (int i = 0; i < c.length; i++) {
             int diff = x - c[i];
 
             if (diff < 0) {
-                break;
+                continue;
             }
 
-            counter = Math.min(counter, solve_memo(memo, c, n, diff) + 1);
+            memo[x] = Math.min(memo[x], solve_memo(memo, c, diff) + 1);
         }
-
-        if (flag) {
-            return memo[x] = counter;
-        } else {
-            return -1;
-        }
+        return memo[x];
     }
 }
