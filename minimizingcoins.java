@@ -16,7 +16,8 @@ public class minimizingcoins {
                 c[i] = Integer.valueOf(cS[i]);
 
             // long sol = solve_rec(c, x);
-            long sol = solve_memo(c, x);
+            // long sol = solve_memo(c, x);
+            long sol = solve_dp(c, x);
 
             if (sol == oo) {
                 sol = -1;
@@ -74,5 +75,29 @@ public class minimizingcoins {
             memo[x] = Math.min(memo[x], solve_memo(memo, c, diff) + 1);
         }
         return memo[x];
+    }
+
+    public static long solve_dp(int[] c, int x) {
+        long[] dp = new long[x + 1];
+        Arrays.fill(dp, oo);
+        dp[0] = 0; // base case: sum of 0 requires 0 coins
+        long ret = solve_dp(dp, c, x);
+        // System.out.println(Arrays.toString(dp));
+        return ret;
+    }
+
+    private static long solve_dp(long[] dp, int[] c, int x) {
+        for (int i = 1; i <= x; i++) {
+            for (int j = 0; j < c.length; j++) {
+                int diff = i - c[j];
+
+                if (diff < 0) {
+                    continue;
+                }
+
+                dp[i] = Math.min(dp[i], dp[diff] + 1);
+            }
+        }
+        return dp[x];
     }
 }
