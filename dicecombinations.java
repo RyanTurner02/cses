@@ -10,7 +10,8 @@ public class dicecombinations {
             int n = Integer.valueOf(br.readLine());
             // System.out.println(solve_rec1(n));
             // System.out.println(solve_rec2(0, n));
-            System.out.println(solve_memo1(n));
+            // System.out.println(solve_memo1(n));
+            System.out.println(solve_dp1(n));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -75,5 +76,29 @@ public class dicecombinations {
             counter = (counter + solve_memo1(memo, n - i)) % MOD;
         }
         return memo[n] = counter;
+    }
+
+    public static long solve_dp1(int n) {
+        long[] dp = new long[n + 1];
+        dp[0] = 1;
+
+        long ret = solve_dp1(dp, n);
+        // System.out.println(Arrays.toString(dp));
+        return ret;
+    }
+
+    private static long solve_dp1(long[] dp, int n) {
+        for(int i = 1; i <= n; i++) {
+            long counter = 0;
+            
+            for(int j = 1; j <= 6; j++) {
+                if(i - j < 0) {
+                    break;
+                }
+                counter = (counter + dp[i - j]) % MOD;
+            }
+            dp[i] = counter;
+        }
+        return dp[n];
     }
 }
