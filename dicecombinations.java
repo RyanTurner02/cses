@@ -50,10 +50,7 @@ public class dicecombinations {
 
     public static long solve_memo1(int n) {
         long[] memo = new long[n + 1];
-
-        for (int i = 0; i < memo.length; i++) {
-            Arrays.fill(memo, -1);
-        }
+        Arrays.fill(memo, -1);
 
         long ret = solve_memo1(memo, n);
         // System.out.println(Arrays.toString(memo));
