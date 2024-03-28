@@ -91,10 +91,6 @@ public class removingdigits {
                     continue;
                 }
 
-                if (i - getLast < 0) {
-                    continue;
-                }
-
                 dp[i] = Math.min(dp[i], dp[i - getLast] + 1);
             }
         }
