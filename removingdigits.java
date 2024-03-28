@@ -9,7 +9,8 @@ public class removingdigits {
             BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
             int n = Integer.valueOf(br.readLine());
             // System.out.println(solve_rec(n));
-            System.out.println(solve_memo(n));
+            // System.out.println(solve_memo(n));
+            System.out.println(solve_dp(n));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -67,5 +68,36 @@ public class removingdigits {
             memo[n] = Math.min(memo[n], solve_memo(memo, n - getLast) + 1);
         }
         return memo[n];
+    }
+
+    public static int solve_dp(int n) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, oo);
+        dp[0] = 0;
+        int ret = solve_dp(dp, n);
+        // System.out.println(Arrays.toString(dp));
+        return ret;
+    }
+
+    private static int solve_dp(int[] dp, int n) {
+        for (int i = 1; i <= n; i++) {
+            int tempN = i;
+
+            while (tempN != 0) {
+                int getLast = tempN % 10;
+                tempN /= 10;
+
+                if (getLast == 0) {
+                    continue;
+                }
+
+                if (i - getLast < 0) {
+                    continue;
+                }
+
+                dp[i] = Math.min(dp[i], dp[i - getLast] + 1);
+            }
+        }
+        return dp[n];
     }
 }
